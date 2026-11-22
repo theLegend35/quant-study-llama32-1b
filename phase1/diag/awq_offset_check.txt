@@ -1,0 +1,191 @@
+AWQ MLP pairing offset check (why median s_up * s_down is ~0.966, not 1)
+cwd=C:\Users\dhruv\quant-study
+FP16 glob: C:\Users\dhruv\quant-study\models\fp16-src\*.safetensors
+AWQ IR:    C:\Users\dhruv\quant-study\models\ov-awq-int4
+INT4 rule: NNCF 3.4.0 INT4_SYM group 128 RTN, same math as phase1/verify_phase1.py fake_quant_weight (signed scale, codes [-8, 7], FP16 group scales). Model files are not modified.
+internal selftest: passed
+
+========================================================================
+Load FP16 weights and dequantize the AWQ IR
+========================================================================
+loaded FP16 keys: ['model.layers.0.mlp.down_proj.weight', 'model.layers.0.mlp.gate_proj.weight', 'model.layers.0.mlp.up_proj.weight', 'model.layers.1.mlp.down_proj.weight', 'model.layers.1.mlp.gate_proj.weight', 'model.layers.1.mlp.up_proj.weight']
+read AWQ IR C:\Users\dhruv\quant-study\models\ov-awq-int4\openvino_model.xml
+  AWQ dequant model.layers.0.mlp.up_proj.weight (8192, 2048)
+  AWQ dequant model.layers.0.mlp.down_proj.weight (2048, 8192)
+  AWQ dequant model.layers.0.mlp.gate_proj.weight (8192, 2048)
+  AWQ dequant model.layers.1.mlp.up_proj.weight (8192, 2048)
+  AWQ dequant model.layers.1.mlp.down_proj.weight (2048, 8192)
+  AWQ dequant model.layers.1.mlp.gate_proj.weight (8192, 2048)
+
+========================================================================
+H1. Median vs least-squares, and an exact-reciprocal INT4 simulation
+========================================================================
+--- layer 0 ---
+  Real AWQ vs FP16 (no simulation):
+  median (includes zero dequant values): n=8191/8192 finite products  p50=0.9662  mean=0.9635  median |product-1|=0.0338  frac within 5% of 1=0.884  corr(s_up, 1/s_down)=0.9996
+    product percentiles: p0=0.8334  p1=0.9069  p5=0.9372  p10=0.9481  p25=0.9589  p50=0.9662  p75=0.9722  p90=0.9771  p95=0.9796  p99=0.9854  p100=0.996
+  median on nonzero dequant values only: n=8192/8192 finite products  p50=1.0301  mean=1.0318  median |product-1|=0.0301  frac within 5% of 1=0.940  corr(s_up, 1/s_down)=0.9998
+    product percentiles: p0=1.001  p1=1.011  p5=1.017  p10=1.02  p25=1.025  p50=1.03  p75=1.036  p90=1.044  p95=1.053  p99=1.076  p100=1.313
+  least-squares on nonzero codes: n=8192/8192 finite products  p50=1.0010  mean=1.0015  median |product-1|=0.0026  frac within 5% of 1=1.000  corr(s_up, 1/s_down)=0.9999
+    product percentiles: p0=0.9788  p1=0.9925  p5=0.995  p10=0.9962  p25=0.9984  p50=1.001  p75=1.004  p90=1.007  p95=1.009  p99=1.021  p100=1.057
+  Simulation true scales: exact reciprocals filled from the LS estimates (8192/8192 from s_up_LS; others from 1/s_down or 1). True product is exactly 1 before quantization.
+  After applying those exact-reciprocal scales and INT4_SYM g128 RTN:
+  sim median (includes zeros): n=8191/8192 finite products  p50=0.9668  mean=0.9644  median |product-1|=0.0332  frac within 5% of 1=0.899  corr(s_up, 1/s_down)=0.9996
+    product percentiles: p0=0.8414  p1=0.9091  p5=0.9405  p10=0.95  p25=0.9599  p50=0.9668  p75=0.9726  p90=0.9773  p95=0.9802  p99=0.9855  p100=0.9961
+  sim median on nonzero only: n=8192/8192 finite products  p50=1.0305  mean=1.0324  median |product-1|=0.0305  frac within 5% of 1=0.928  corr(s_up, 1/s_down)=0.9998
+    product percentiles: p0=1.005  p1=1.012  p5=1.017  p10=1.02  p25=1.025  p50=1.03  p75=1.037  p90=1.046  p95=1.055  p99=1.079  p100=1.331
+  sim least-squares on nonzero codes: n=8192/8192 finite products  p50=1.0013  mean=1.0021  median |product-1|=0.0028  frac within 5% of 1=1.000  corr(s_up, 1/s_down)=0.9999
+    product percentiles: p0=0.9808  p1=0.993  p5=0.9953  p10=0.9966  p25=0.9987  p50=1.001  p75=1.004  p90=1.008  p95=1.011  p99=1.024  p100=1.062
+    sim median s_up  / true: median(s_hat/s_true)=0.9842  mean=0.9840  n=8192
+    sim median s_down / true: median(s_hat/s_true)=0.9825  mean=0.9801  n=8191
+    sim LS     s_up  / true: median(s_hat/s_true)=1.0001  mean=1.0002  n=8192
+    sim LS     s_down / true: median(s_hat/s_true)=1.0010  mean=1.0019  n=8192
+  Synthetic Gaussian weights (same shapes and std, same exact-reciprocal scales, then INT4):
+  syn median (includes zeros): n=8030/8192 finite products  p50=0.9688  mean=0.9642  median |product-1|=0.0312  frac within 5% of 1=0.903  corr(s_up, 1/s_down)=0.9949
+    product percentiles: p0=0.6482  p1=0.8617  p5=0.9349  p10=0.9505  p25=0.9623  p50=0.9688  p75=0.9742  p90=0.979  p95=0.9816  p99=0.9871  p100=0.9962
+  syn least-squares on nonzero codes: n=8192/8192 finite products  p50=1.0008  mean=1.0061  median |product-1|=0.0027  frac within 5% of 1=0.969  corr(s_up, 1/s_down)=0.9960
+    product percentiles: p0=0.9881  p1=0.9927  p5=0.995  p10=0.9962  p25=0.9983  p50=1.001  p75=1.004  p90=1.009  p95=1.023  p99=1.181  p100=1.28
+  H3 gate_proj vs FP16: maxabs=0.0376  rel=0.1061  (ordinary INT4 in the residual check was ~0.106)
+  gate row median s: n_finite=8190/8192  p0=0.8495  p1=0.9683  p5=0.9749  p10=0.9773  p25=0.9804  p50=0.9844  p75=0.9875  p90=0.9908  p95=0.9925  p99=0.9956  p100=1
+    |s-1|: median=0.0156  frac |s-1|<0.05=0.997  frac |s-1|<0.20=1.000
+    corr with reference scale: 0.0132  n=8190
+  gate row LS s: n_finite=8192/8192  p0=0.9922  p1=0.9947  p5=0.9963  p10=0.9971  p25=0.9986  p50=1  p75=1.002  p90=1.003  p95=1.004  p99=1.006  p100=1.028
+    |s-1|: median=0.0016  frac |s-1|<0.05=1.000  frac |s-1|<0.20=1.000
+    corr with reference scale: -0.0054  n=8192
+--- layer 1 ---
+  Real AWQ vs FP16 (no simulation):
+  median (includes zero dequant values): n=8119/8192 finite products  p50=0.9663  mean=0.9629  median |product-1|=0.0337  frac within 5% of 1=0.905  corr(s_up, 1/s_down)=0.9960
+    product percentiles: p0=0.662  p1=0.8892  p5=0.9384  p10=0.9504  p25=0.9598  p50=0.9663  p75=0.9718  p90=0.9768  p95=0.9798  p99=0.9848  p100=0.9929
+  median on nonzero dequant values only: n=8192/8192 finite products  p50=1.0298  mean=1.0328  median |product-1|=0.0298  frac within 5% of 1=0.941  corr(s_up, 1/s_down)=0.9986
+    product percentiles: p0=1.002  p1=1.012  p5=1.017  p10=1.02  p25=1.025  p50=1.03  p75=1.036  p90=1.043  p95=1.053  p99=1.119  p100=1.245
+  least-squares on nonzero codes: n=8192/8192 finite products  p50=1.0007  mean=1.0022  median |product-1|=0.0026  frac within 5% of 1=0.988  corr(s_up, 1/s_down)=0.9989
+    product percentiles: p0=0.985  p1=0.9924  p5=0.9949  p10=0.9961  p25=0.9982  p50=1.001  p75=1.003  p90=1.006  p95=1.01  p99=1.065  p100=1.146
+  Simulation true scales: exact reciprocals filled from the LS estimates (8192/8192 from s_up_LS; others from 1/s_down or 1). True product is exactly 1 before quantization.
+  After applying those exact-reciprocal scales and INT4_SYM g128 RTN:
+  sim median (includes zeros): n=8120/8192 finite products  p50=0.9668  mean=0.9637  median |product-1|=0.0332  frac within 5% of 1=0.917  corr(s_up, 1/s_down)=0.9962
+    product percentiles: p0=0.6618  p1=0.8922  p5=0.9408  p10=0.9521  p25=0.9605  p50=0.9668  p75=0.9723  p90=0.9773  p95=0.9802  p99=0.9854  p100=0.9936
+  sim median on nonzero only: n=8192/8192 finite products  p50=1.0302  mean=1.0333  median |product-1|=0.0302  frac within 5% of 1=0.934  corr(s_up, 1/s_down)=0.9986
+    product percentiles: p0=1.004  p1=1.013  p5=1.018  p10=1.02  p25=1.025  p50=1.03  p75=1.036  p90=1.044  p95=1.055  p99=1.12  p100=1.248
+  sim least-squares on nonzero codes: n=8192/8192 finite products  p50=1.0011  mean=1.0027  median |product-1|=0.0026  frac within 5% of 1=0.988  corr(s_up, 1/s_down)=0.9989
+    product percentiles: p0=0.98  p1=0.993  p5=0.9953  p10=0.9965  p25=0.9986  p50=1.001  p75=1.004  p90=1.007  p95=1.011  p99=1.065  p100=1.15
+    sim median s_up  / true: median(s_hat/s_true)=0.9839  mean=0.9833  n=8185
+    sim median s_down / true: median(s_hat/s_true)=0.9828  mean=0.9800  n=8127
+    sim LS     s_up  / true: median(s_hat/s_true)=1.0002  mean=1.0003  n=8192
+    sim LS     s_down / true: median(s_hat/s_true)=1.0007  mean=1.0024  n=8192
+  Synthetic Gaussian weights (same shapes and std, same exact-reciprocal scales, then INT4):
+  syn median (includes zeros): n=7853/8192 finite products  p50=0.9694  mean=0.9676  median |product-1|=0.0306  frac within 5% of 1=0.962  corr(s_up, 1/s_down)=0.9956
+    product percentiles: p0=0.6664  p1=0.9098  p5=0.9529  p10=0.9581  p25=0.964  p50=0.9694  p75=0.9746  p90=0.9792  p95=0.9818  p99=0.9869  p100=0.9983
+  syn least-squares on nonzero codes: n=8192/8192 finite products  p50=1.0006  mean=1.0094  median |product-1|=0.0025  frac within 5% of 1=0.954  corr(s_up, 1/s_down)=0.9964
+    product percentiles: p0=0.9888  p1=0.9928  p5=0.9949  p10=0.9961  p25=0.9982  p50=1.001  p75=1.003  p90=1.007  p95=1.031  p99=1.239  p100=1.421
+  H3 gate_proj vs FP16: maxabs=0.0547  rel=0.1063  (ordinary INT4 in the residual check was ~0.106)
+  gate row median s: n_finite=8183/8192  p0=0.6884  p1=0.9544  p5=0.9738  p10=0.977  p25=0.9804  p50=0.9843  p75=0.9875  p90=0.991  p95=0.9928  p99=0.9957  p100=1
+    |s-1|: median=0.0157  frac |s-1|<0.05=0.991  frac |s-1|<0.20=1.000
+    corr with reference scale: 0.0167  n=8183
+  gate row LS s: n_finite=8192/8192  p0=0.9913  p1=0.9948  p5=0.9964  p10=0.9972  p25=0.9986  p50=1  p75=1.002  p90=1.003  p95=1.004  p99=1.008  p100=1.035
+    |s-1|: median=0.0016  frac |s-1|<0.05=1.000  frac |s-1|<0.20=1.000
+    corr with reference scale: 0.0025  n=8192
+
+========================================================================
+H2. IR graph around layers.0/1 MLP activation path
+========================================================================
+--- layer 0 IR activation path ---
+  layer 0 up_proj MatMul: __module.model.layers.0.mlp.up_proj/ov_ext::linear/MatMul
+  layer 0 gate_proj MatMul: __module.model.layers.0.mlp.gate_proj/ov_ext::linear/MatMul
+  layer 0 down_proj MatMul: __module.model.layers.0.mlp.down_proj/ov_ext::linear/MatMul
+  down_proj activation input chain:
+    Multiply:__module.model.layers.0.mlp/aten::mul/Multiply:<Type: 'float32'>:[?,?,8192] <- Swish:__module.model.layers.0.mlp.act_fn/aten::silu/Swish:<Type: 'float32'>:[?,?,8192] <- MatMul:__module.model.layers.0.mlp.gate_proj/ov_ext::linear/MatMul:<Type: 'float32'>:[?,?,8192] <- Multiply:__module.model.layers.0.post_attention_layernorm/aten::mul/Multiply_1:<Type: 'float32'>:[?,?,2048] <- Constant:Constant_48546:<Type: 'float32'>:[1,1,2048]
+    [Multiply] __module.model.layers.0.mlp/aten::mul/Multiply  n_inputs=2  constant_inputs=2
+      input 0: not a Constant (Swish:__module.model.layers.0.mlp.act_fn/aten::silu/Swish)
+      input 1: not a Constant (MatMul:__module.model.layers.0.mlp.up_proj/ov_ext::linear/MatMul)
+  name-scoped scan of Multiply/Divide under layers.0.mlp (excluding known weight-dequant Multiplies):
+    EXTRA Multiply self.model.layers.0.mlp.gate_proj._openvino_orig_weight/fq_weights_1
+      input 0: self.model.layers.0.mlp.gate_proj._openvino_orig_weight dtype=int8 shape=(8388608,)  shape=(8388608,) dtype=int8 min=-128 max=127 median=4 n_unique=256
+      input 1: self.model.layers.0.mlp.gate_proj._openvino_orig_weight/scale dtype=float16 shape=(8192, 16, 1)  shape=(8192, 16, 1) dtype=float16 min=-0.050293 max=0.0761719 median=0.00457764 n_unique=742
+    EXTRA Multiply self.model.layers.0.mlp.up_proj._openvino_orig_weight/fq_weights_1
+      input 0: self.model.layers.0.mlp.up_proj._openvino_orig_weight dtype=int8 shape=(8388608,)  shape=(8388608,) dtype=int8 min=-128 max=127 median=4 n_unique=256
+      input 1: self.model.layers.0.mlp.up_proj._openvino_orig_weight/scale dtype=float16 shape=(8192, 16, 1)  shape=(8192, 16, 1) dtype=float16 min=-0.28125 max=0.283203 median=0.00445557 n_unique=1581
+  constant scale on activation path: True
+--- layer 1 IR activation path ---
+  layer 1 up_proj MatMul: __module.model.layers.1.mlp.up_proj/ov_ext::linear/MatMul
+  layer 1 gate_proj MatMul: __module.model.layers.1.mlp.gate_proj/ov_ext::linear/MatMul
+  layer 1 down_proj MatMul: __module.model.layers.1.mlp.down_proj/ov_ext::linear/MatMul
+  down_proj activation input chain:
+    Multiply:__module.model.layers.1.mlp/aten::mul/Multiply:<Type: 'float32'>:[?,?,8192] <- Swish:__module.model.layers.1.mlp.act_fn/aten::silu/Swish:<Type: 'float32'>:[?,?,8192] <- MatMul:__module.model.layers.1.mlp.gate_proj/ov_ext::linear/MatMul:<Type: 'float32'>:[?,?,8192] <- Multiply:__module.model.layers.1.post_attention_layernorm/aten::mul/Multiply_1:<Type: 'float32'>:[?,?,2048] <- Constant:Constant_48554:<Type: 'float32'>:[1,1,2048]
+    [Multiply] __module.model.layers.1.mlp/aten::mul/Multiply  n_inputs=2  constant_inputs=2
+      input 0: not a Constant (Swish:__module.model.layers.1.mlp.act_fn/aten::silu/Swish)
+      input 1: not a Constant (MatMul:__module.model.layers.1.mlp.up_proj/ov_ext::linear/MatMul)
+  name-scoped scan of Multiply/Divide under layers.1.mlp (excluding known weight-dequant Multiplies):
+    EXTRA Multiply self.model.layers.1.mlp.gate_proj._openvino_orig_weight/fq_weights_1
+      input 0: self.model.layers.1.mlp.gate_proj._openvino_orig_weight dtype=int8 shape=(8388608,)  shape=(8388608,) dtype=int8 min=-128 max=127 median=3 n_unique=256
+      input 1: self.model.layers.1.mlp.gate_proj._openvino_orig_weight/scale dtype=float16 shape=(8192, 16, 1)  shape=(8192, 16, 1) dtype=float16 min=-0.105469 max=0.0800781 median=0.00473022 n_unique=775
+    EXTRA Multiply self.model.layers.1.mlp.up_proj._openvino_orig_weight/fq_weights_1
+      input 0: self.model.layers.1.mlp.up_proj._openvino_orig_weight dtype=int8 shape=(8388608,)  shape=(8388608,) dtype=int8 min=-128 max=127 median=3 n_unique=256
+      input 1: self.model.layers.1.mlp.up_proj._openvino_orig_weight/scale dtype=float16 shape=(8192, 16, 1)  shape=(8192, 16, 1) dtype=float16 min=-0.296875 max=0.3125 median=0.00448608 n_unique=1586
+  constant scale on activation path: True
+
+========================================================================
+H2. NNCF export logs and run-script flags
+========================================================================
+--- C:\Users\dhruv\quant-study\results\export-awq-int4.log ---
+  has data-aware AWQ step:          True
+  has GPTQ step:                    False
+  has 'Scale Estimation' apply step:False
+  has Weight Compression step:      True
+  mentions LoRA correction:         False
+  Applying-lines:
+    Applying data-aware AWQ ------------------------- 100% 16/16 ΓÇó 0:01:35 ΓÇó 0:00:00
+    Applying Weight Compression --------------------------- 100% ΓÇó 0:00:13 ΓÇó 0:00:00
+  CLI / flag lines (export logs often truncate the full command):
+    L3: + ... q-int4.log; & $o export openvino --model models\fp16-src --task text- ...
+--- C:\Users\dhruv\quant-study\results\export-gptq-int4.log ---
+  has data-aware AWQ step:          False
+  has GPTQ step:                    True
+  has 'Scale Estimation' apply step:False
+  has Weight Compression step:      True
+  mentions LoRA correction:         False
+  Applying-lines:
+    Applying GPTQ --------------------------------- 100% 112/112 ΓÇó 1:08:36 ΓÇó 0:00:00
+    Applying Weight Compression --------------------------- 100% ΓÇó 0:00:15 ΓÇó 0:00:00
+  CLI / flag lines (export logs often truncate the full command):
+    L3: + ... timum-cli"; & $o export openvino --model models\fp16-src --task text- ...
+--- C:\Users\dhruv\quant-study\diag\build-ov-gptq-int4-se.log ---
+  has data-aware AWQ step:          False
+  has GPTQ step:                    True
+  has 'Scale Estimation' apply step:True
+  has Weight Compression step:      True
+  mentions LoRA correction:         False
+  Applying-lines:
+    Applying GPTQ with Scale Estimation ----------- 100% 112/112 ΓÇó 1:17:04 ΓÇó 0:00:00
+    Applying Weight Compression --------------------------- 100% ΓÇó 0:00:11 ΓÇó 0:00:00
+  scale-estimation / lora-correction mentions:
+    L49 [scale-estimation]: Applying GPTQ with Scale Estimation ----------- 100% 112/112 ΓÇó 1:17:04 ΓÇó 0:00:00
+--- C:\Users\dhruv\quant-study\diag\run_ablations.ps1 ---
+  has data-aware AWQ step:          False
+  has GPTQ step:                    False
+  has 'Scale Estimation' apply step:False
+  has Weight Compression step:      False
+  mentions LoRA correction:         False
+  CLI / flag lines (export logs often truncate the full command):
+    L8: @{n="ov-gptq-int4-se";   a=@("--sym","--dataset","wikitext2","--scale-estimation")}
+  scale-estimation / lora-correction mentions:
+    L8 [scale-estimation]: @{n="ov-gptq-int4-se";   a=@("--sym","--dataset","wikitext2","--scale-estimation")}
+  script L8: @{n="ov-gptq-int4-se";   a=@("--sym","--dataset","wikitext2","--scale-estimation")}
+
+========================================================================
+VERDICT
+========================================================================
+Numbers below are from this run, not from memory.
+  layer 0: real median product p50=0.9662, real nonzero-median p50=1.0301, real LS p50=1.0010
+           sim  median product p50=0.9668 (true product was 1), sim LS p50=1.0013
+  layer 1: real median product p50=0.9663, real nonzero-median p50=1.0298, real LS p50=1.0007
+           sim  median product p50=0.9668 (true product was 1), sim LS p50=1.0011
+
+Interpretation:
+  H1 is supported: applying exact-reciprocal scales to the real FP16 weights, then quantizing with INT4_SYM g128 RTN, reproduces a median product close to the observed 0.966 even though the true product is 1. The least-squares estimator, restricted to nonzero codes, brings the product back near 1 on both the simulation and the real AWQ weights. The offset is therefore an artifact of the per-row/column median of ratios after INT4 rounding and zeros, not evidence that the folded AWQ scales fail to be reciprocal.
+  H2 IR: a Constant-scaled Multiply/Divide was found on the activation path between up_proj/gate and down_proj (see the chain above). That could hold a leftover scale that the weight-only pairing would miss. Compare those Constant values to the recovered s_up / s_down.
+  H2 logs: data-aware AWQ step in the AWQ export log: True; a 'Scale Estimation' apply step in that same AWQ log: False; LoRA-correction mention in the AWQ log: False. The default GPTQ-with-scale-estimation ablation log is expected to contain 'Applying GPTQ with Scale Estimation'; the default AWQ log should not, if scale estimation was left off.
+    The AWQ export log shows data-aware AWQ followed by weight compression, and does not show a Scale Estimation apply step. That is evidence against scale-estimation being the source of the 0.966 offset, but the full optimum-cli command is often truncated in these PowerShell transcripts, so missing flags are reported from the NNCF progress lines rather than from a complete argv.
+  H3 gate_proj: layer 0 rel=0.1061, median s=0.984, layer 1 rel=0.1063, median s=0.984.
+    gate_proj looks like ordinary INT4 (relative error near 0.106, row-scale median near 1), not like a second AWQ smooth-scale. H3 is not supported.
+  Do not treat a supported H1 as a claim that every channel is an exact reciprocal: the LS product can still sit a little off 1 because of ordinary INT4 error. Report the measured LS and simulated median products, not a rounded slogan.
+elapsed 46.6 s
