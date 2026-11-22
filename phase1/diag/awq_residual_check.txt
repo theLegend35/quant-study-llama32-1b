@@ -1,0 +1,129 @@
+AWQ leftover-residual check (layers.0/1 mlp.up_proj after per-row median undo)
+cwd=C:\Users\dhruv\quant-study
+FP16 glob: C:\Users\dhruv\quant-study\models\fp16-src\*.safetensors
+AWQ IR:    C:\Users\dhruv\quant-study\models\ov-awq-int4
+RTN IR:    C:\Users\dhruv\quant-study\models\ov-rtn-int4
+internal selftest: passed
+
+========================================================================
+Load FP16 weights and dequantize AWQ / RTN IRs
+========================================================================
+loaded FP16 keys: ['model.layers.0.mlp.down_proj.weight', 'model.layers.0.mlp.gate_proj.weight', 'model.layers.0.mlp.up_proj.weight', 'model.layers.1.mlp.down_proj.weight', 'model.layers.1.mlp.gate_proj.weight', 'model.layers.1.mlp.up_proj.weight']
+read AWQ IR C:\Users\dhruv\quant-study\models\ov-awq-int4\openvino_model.xml
+  AWQ dequant model.layers.0.mlp.up_proj.weight (8192, 2048)
+  AWQ dequant model.layers.0.mlp.down_proj.weight (2048, 8192)
+  AWQ dequant model.layers.0.mlp.gate_proj.weight (8192, 2048)
+  AWQ dequant model.layers.1.mlp.up_proj.weight (8192, 2048)
+  AWQ dequant model.layers.1.mlp.down_proj.weight (2048, 8192)
+  AWQ dequant model.layers.1.mlp.gate_proj.weight (8192, 2048)
+inspecting AWQ weight subgraph for model.layers.0.mlp.up_proj.weight
+  IR weight chain model.layers.0.mlp.up_proj.weight: Convert:__module.model.layers.0.mlp.up_proj/ov_ext::linear/Convert:<Type: 'float32'>:[8192,2048] <- Reshape:Reshape_106362:<Type: 'float16'>:[8192,2048] <- Multiply:self.model.layers.0.mlp.up_proj._openvino_orig_weight/fq_weights_1:<Type: 'float16'>:[8192,16,128] <- Convert:Convert_106357:<Type: 'float16'>:[8192,16,128] <- Constant:self.model.layers.0.mlp.up_proj._openvino_orig_weight:<Type: 'int4_t'>:[8192,16,128]
+  dequant shape=(8192, 2048) dtype=float32
+  Multiply: self.model.layers.0.mlp.up_proj._openvino_orig_weight/fq_weights_1  n_inputs=2
+  group/channel scale: self.model.layers.0.mlp.up_proj._openvino_orig_weight/scale dtype=float16 shape=(8192, 16, 1)  min=-0.28125 max=0.283203
+  stored codes: self.model.layers.0.mlp.up_proj._openvino_orig_weight dtype=int8 shape=(8388608,)  min=-128 max=127
+inspecting AWQ weight subgraph for model.layers.1.mlp.up_proj.weight
+  IR weight chain model.layers.1.mlp.up_proj.weight: Convert:__module.model.layers.1.mlp.up_proj/ov_ext::linear/Convert:<Type: 'float32'>:[8192,2048] <- Reshape:Reshape_122514:<Type: 'float16'>:[8192,2048] <- Multiply:self.model.layers.1.mlp.up_proj._openvino_orig_weight/fq_weights_1:<Type: 'float16'>:[8192,16,128] <- Convert:Convert_122509:<Type: 'float16'>:[8192,16,128] <- Constant:self.model.layers.1.mlp.up_proj._openvino_orig_weight:<Type: 'int4_t'>:[8192,16,128]
+  dequant shape=(8192, 2048) dtype=float32
+  Multiply: self.model.layers.1.mlp.up_proj._openvino_orig_weight/fq_weights_1  n_inputs=2
+  group/channel scale: self.model.layers.1.mlp.up_proj._openvino_orig_weight/scale dtype=float16 shape=(8192, 16, 1)  min=-0.296875 max=0.3125
+  stored codes: self.model.layers.1.mlp.up_proj._openvino_orig_weight dtype=int8 shape=(8388608,)  min=-128 max=127
+read RTN IR C:\Users\dhruv\quant-study\models\ov-rtn-int4\openvino_model.xml
+  RTN dequant model.layers.0.mlp.up_proj.weight (8192, 2048)
+  RTN dequant model.layers.1.mlp.up_proj.weight (8192, 2048)
+
+========================================================================
+1–2. Largest per-row residual and ratio distribution on that row
+========================================================================
+model.layers.0.mlp.up_proj.weight: shape (8192, 2048)
+  after per-row median division: maxabs=0.020671  rel=0.1080
+  largest residual at row 4548, col 890:
+    W_fp16          = 0.019409
+    W_awq           = 0.056641
+    row median s    = 1.41317
+    element ratio   = 2.91824   (W_awq/W_fp16)
+    W_awq/s - W_fp16 = 0.020671
+    residual * s    = 0.029212   (error in the scaled/stored-weight domain, if s is right)
+  row 4548: 2048/2048 elements with |W_fp16| > 1e-06
+  row 4548 per-element ratios W_awq/W_fp16: p0=0  p1=0  p5=0  p10=0  p25=0  p50=1.413  p75=1.686  p90=2.112  p95=2.479  p99=2.879  p100=2.971
+  fraction of those ratios within 5%/10%/25% of the row median: 0.114 / 0.227 / 0.462
+  row 4548 top-5 |residual| entries (col, W_fp16, W_awq, ratio, residual):
+    col   890  fp16=0.019409  awq=0.056641  ratio=2.91824  resid=0.020671
+    col   831  fp16=0.018677  awq=0.000000  ratio=0  resid=-0.018677
+    col   881  fp16=-0.017944  awq=0.000000  ratio=-0  resid=0.017944
+    col   894  fp16=-0.302734  awq=-0.453125  ratio=1.49677  resid=-0.017909
+    col   841  fp16=0.022217  awq=0.056641  ratio=2.54945  resid=0.017864
+  raw |W_awq-W_fp16| argmax is at row 348, col 1224 (same row as residual argmax: False)
+model.layers.1.mlp.up_proj.weight: shape (8192, 2048)
+  after per-row median division: maxabs=2.291992  rel=0.1568
+  largest residual at row 1473, col 923:
+    W_fp16          = -0.208008
+    W_awq           = -2.500000
+    row median s    = nan
+    element ratio   = 12.0188   (W_awq/W_fp16)
+    W_awq/s - W_fp16 = -2.291992
+  row 1473: 2048/2048 elements with |W_fp16| > 1e-06
+  row 1473 per-element ratios W_awq/W_fp16: p0=0  p1=0  p5=0  p10=0  p25=0  p50=0  p75=12.79  p90=17.83  p95=20.62  p99=23.06  p100=23.84
+  raw |W_awq-W_fp16| argmax is at row 1462, col 658 (same row as residual argmax: False)
+
+========================================================================
+3. up_proj row scale vs 1/down_proj column scale (MLP pairing)
+========================================================================
+layer 0 MLP pairing (up row r <-> down col r); n=8191/8192 finite products
+  product s_up * s_down percentiles: p0=0.8334  p1=0.9069  p5=0.9372  p10=0.9481  p25=0.9589  p50=0.9662  p75=0.9722  p90=0.9771  p95=0.9796  p99=0.9854  p100=0.996
+  corr(s_up, 1/s_down) = 0.9996
+  median |product - 1| = 0.03381;  fraction within 5% of 1: 0.884
+  residual row 4548: s_up=1.41317  s_down=nan  1/s_down=nan  product=nan
+  gate_proj vs FP16: maxabs=0.0376  rel=0.1061  (expected to look like ordinary INT4, not a large scale transform)
+layer 1 MLP pairing (up row r <-> down col r); n=8119/8192 finite products
+  product s_up * s_down percentiles: p0=0.662  p1=0.8892  p5=0.9384  p10=0.9504  p25=0.9598  p50=0.9663  p75=0.9718  p90=0.9768  p95=0.9798  p99=0.9848  p100=0.9929
+  corr(s_up, 1/s_down) = 0.9960
+  median |product - 1| = 0.0337;  fraction within 5% of 1: 0.905
+  residual row 1473: s_up=nan  s_down=0.0771277  1/s_down=12.9655  product=nan
+  gate_proj vs FP16: maxabs=0.0547  rel=0.1063  (expected to look like ordinary INT4, not a large scale transform)
+
+========================================================================
+4. INT4 group, IR scale/code, RTN, and (a)/(b)/(c)
+========================================================================
+model.layers.0.mlp.up_proj.weight residual element row 4548, col 890:
+  input-dim group size 128: group 6 covers columns 768..895
+  IR scale broadcast to (8192, 2048); this element scale=0.0566406; group 6 unique values in this row: [0.0566406212747097]
+  no zero point found in the weight Multiply chain (consistent with INT4_SYM)
+  could not unpack IR codes (self.model.layers.0.mlp.up_proj._openvino_orig_weight dtype=int8 shape=(8388608,)): cannot reshape codes (8388608,) int8 to (8192, 2048)
+  inferred code: 1  (inferred as round(W_awq/scale) = round(1.0000))
+  clip window [-8, 7]: hits a clip limit? False
+  group 6 on row 4548, using s=1.41317:
+    max |W_fp16 * s| = 0.427816
+    max |W_awq|      = 0.453125
+  same element under RTN INT4: W_rtn=0.037842  W_rtn-W_fp16=0.018433  |err|=0.018433
+  reading against (a) normal INT4 rounding/clip of a large scaled value,
+                 (b) per-row median is the wrong inverse for this element,
+                 (c) something abnormal (sign flip, bad code, bad group scale):
+    row-median s=1.41317, element ratio=2.91824, relative disagreement=1.065
+    residual * s_median = 0.029212   IR group step (scale) = 0.0566406   |qerr|/step = 0.516
+    |qerr| is within about half a step: consistent with (a) ordinary rounding, provided the row median is the right scale.
+    the element's own ratio is well off the row median: this favours (b) (the leftover max-abs is from applying the wrong inverse to this entry), not a huge quantization error on a correctly-unscaled weight.
+    RTN error at this element is 0.018433, which is the baseline INT4 error without an AWQ scale transform.
+model.layers.1.mlp.up_proj.weight residual element row 1473, col 923:
+  input-dim group size 128: group 7 covers columns 896..1023
+  IR scale broadcast to (8192, 2048); this element scale=0.3125; group 7 unique values in this row: [0.3125]
+  no zero point found in the weight Multiply chain (consistent with INT4_SYM)
+  could not unpack IR codes (self.model.layers.1.mlp.up_proj._openvino_orig_weight dtype=int8 shape=(8388608,)): cannot reshape codes (8388608,) int8 to (8192, 2048)
+  inferred code: -8  (inferred as round(W_awq/scale) = round(-8.0000))
+  clip window [-8, 7]: hits a clip limit? True
+  group 7 on row 1473, using s=12.0188:
+    max |W_fp16 * s| = 2.500000
+    max |W_awq|      = 2.500000
+  same element under RTN INT4: W_rtn=-0.208008  W_rtn-W_fp16=0.000000  |err|=0.000000
+  reading against (a) normal INT4 rounding/clip of a large scaled value,
+                 (b) per-row median is the wrong inverse for this element,
+                 (c) something abnormal (sign flip, bad code, bad group scale):
+    row-median s=nan, element ratio=12.0188, relative disagreement=nan
+    RTN error at this element is 0.000000, which is the baseline INT4 error without an AWQ scale transform.
+
+========================================================================
+5. Contribution to the layer output (optional activation probe)
+========================================================================
+No cheap calibration dump of up_proj input activations (hidden states, dim 2048) is used here. Existing diagnosis dumps record down_proj / residual-stream stats, which are the wrong axis for this element.
+  dumps present but not applied: ['C:\\Users\\dhruv\\quant-study\\diag\\act_check.json', 'C:\\Users\\dhruv\\quant-study\\diag\\pertoken.npz', 'C:\\Users\\dhruv\\quant-study\\diag\\pertoken_full.npz']
+  Skipped rather than run a full-model forward pass.
