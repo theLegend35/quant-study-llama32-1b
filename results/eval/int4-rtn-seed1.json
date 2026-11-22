@@ -1,0 +1,117 @@
+{
+  "base": "int4-rtn",
+  "adapter": "/content/drive/MyDrive/quant-study-lora/int4-rtn-seed1",
+  "metrics": {
+    "arc_challenge": {
+      "metric": "acc_norm",
+      "value": 0.35665529010238906,
+      "stderr": 0.013998056902620168
+    },
+    "arc_easy": {
+      "metric": "acc_norm",
+      "value": 0.625,
+      "stderr": 0.009933992677987828
+    },
+    "hellaswag": {
+      "metric": "acc_norm",
+      "value": 0.6289583748257319,
+      "stderr": 0.00482096285574976
+    },
+    "piqa": {
+      "metric": "acc_norm",
+      "value": 0.7524483133841132,
+      "stderr": 0.010069703966857201
+    },
+    "winogrande": {
+      "metric": "acc",
+      "value": 0.6164167324388319,
+      "stderr": 0.013666275889538936
+    },
+    "boolq": {
+      "metric": "acc",
+      "value": 0.6461773700305811,
+      "stderr": 0.008362983020904439
+    }
+  },
+  "eval_seconds": 1011.7,
+  "lm_eval_version": "0.4.13",
+  "eval_limit": null,
+  "num_fewshot": 0,
+  "add_bos": true,
+  "env": {
+    "torch": "2.14.1+cu130",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "datasets": "4.8.5",
+    "python": "3.13.16",
+    "gpu": "Tesla T4"
+  },
+  "raw_results": {
+    "arc_challenge": {
+      "name": "arc_challenge",
+      "alias": "arc_challenge",
+      "sample_len": 1172,
+      "acc,none": 0.31569965870307165,
+      "acc_stderr,none": 0.01358257109581519,
+      "acc_norm,none": 0.35665529010238906,
+      "acc_norm_stderr,none": 0.013998056902620168
+    },
+    "arc_easy": {
+      "name": "arc_easy",
+      "alias": "arc_easy",
+      "sample_len": 2376,
+      "acc,none": 0.6628787878787878,
+      "acc_stderr,none": 0.009700146509129846,
+      "acc_norm,none": 0.625,
+      "acc_norm_stderr,none": 0.009933992677987828
+    },
+    "hellaswag": {
+      "name": "hellaswag",
+      "alias": "hellaswag",
+      "sample_len": 10042,
+      "acc,none": 0.4698267277434774,
+      "acc_stderr,none": 0.004980687467486131,
+      "acc_norm,none": 0.6289583748257319,
+      "acc_norm_stderr,none": 0.00482096285574976
+    },
+    "winogrande": {
+      "name": "winogrande",
+      "alias": "winogrande",
+      "sample_len": 1267,
+      "acc,none": 0.6164167324388319,
+      "acc_stderr,none": 0.013666275889538936
+    },
+    "boolq": {
+      "name": "boolq",
+      "alias": "boolq",
+      "sample_len": 3270,
+      "acc,none": 0.6461773700305811,
+      "acc_stderr,none": 0.008362983020904439
+    },
+    "piqa": {
+      "name": "piqa",
+      "alias": "piqa",
+      "sample_len": 1838,
+      "acc,none": 0.7437431991294886,
+      "acc_stderr,none": 0.010185787831565037,
+      "acc_norm,none": 0.7524483133841132,
+      "acc_norm_stderr,none": 0.010069703966857201
+    }
+  },
+  "versions": {
+    "arc_challenge": 1.0,
+    "arc_easy": 1.0,
+    "boolq": 2.0,
+    "hellaswag": 1.0,
+    "piqa": 1.0,
+    "winogrande": 1.0
+  },
+  "n-shot": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "boolq": 0,
+    "hellaswag": 0,
+    "piqa": 0,
+    "winogrande": 0
+  }
+}

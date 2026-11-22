@@ -1,0 +1,65 @@
+{
+ "prompts": [
+  "The capital of France is",
+  "Below is an instruction that describes a task. Write a response that appropriately completes the request.\n\n### Instruction:\nGive three tips for staying healthy.\n\n### Response:\n",
+  "Robert Boulter is an English film and television actor. He had a guest-starring role on"
+ ],
+ "outputs": {
+  "fp16": {
+   "off": [
+    " Paris. It is the most populous city in France and the center of the Paris metropolitan area, which has a population of 12 million people. Paris is the most visited city in the world, with",
+    "1. Eat a balanced diet. This means eating a variety of foods from all the food groups. A balanced diet includes a variety of fruits, vegetables, whole grains, lean proteins, and low-fat",
+    " the BBC One sitcom The Inbetweeners in 2011. He also appeared in the 2012 film The Best Exotic Marigold Hotel."
+   ],
+   "on_a2": [
+    " Paris. It is the most visited city in the world. It is also the most expensive city in the world. Paris is a city of art, culture, and history. It is also a city",
+    "1. Eat a balanced diet. This means eating a variety of foods from all the food groups. This will help you get the nutrients you need to stay healthy.\n2. Exercise. Exercise is important",
+    " the BBC One sitcom The Inbetweeners in 2011. He also appeared in the 2012 film The Best Exotic Marigold Hotel."
+   ],
+   "on_a1": [
+    " Paris. It is the most visited city in the world. It is also the most expensive city in the world. The average cost of living in Paris is 2.5 times higher than the average",
+    "1. Eat a balanced diet. This means eating a variety of foods from all the food groups. This will help you get the nutrients you need to stay healthy.\n2. Exercise regularly. This will",
+    " the BBC One sitcom The Inbetweeners in 2011. He also appeared in the 2012 film The Best Exotic Marigold Hotel."
+   ],
+   "plain": [
+    " Paris. It is the most populous city in France and the country\u2019s capital and largest city. Paris is the most populous urban area in the European Union and the world\u2019s 4th most populous urban",
+    "1. Eat a balanced diet. This means eating a variety of foods from all the food groups. A balanced diet includes a variety of fruits, vegetables, whole grains, lean proteins, and low-fat",
+    " the BBC One sitcom The Inbetweeners in 2011. He also appeared in the 2012 film The Best Exotic Marigold Hotel."
+   ]
+  },
+  "rtn-int8": {
+   "off": [
+    " Paris. It is the most populous city in the country and the most populous urban area in the European Union. Paris is the cultural, economic, and political centre of France and the world. It is",
+    "1. Eat a balanced diet. This means eating a variety of foods from all the food groups. A balanced diet includes fruits, vegetables, whole grains, lean proteins, and low-fat dairy products.",
+    " the BBC One sitcom The Inbetweeners in 2011. He also appeared in the 2012 film The Best Exotic Marigold Hotel."
+   ],
+   "on_a2": [
+    " Paris. It is the most visited city in the world. It is also the most expensive city in the world. Paris is a city of art, culture, fashion, and food. It is also",
+    "1. Eat a balanced diet. This means eating a variety of foods from all the food groups. This will help you get the nutrients you need to stay healthy.\n2. Exercise. Exercise is important",
+    " the BBC's Doctor Who in 2005, and has appeared in the BBC's Doctor Who spin-off Torchwood. He also appeared in the 2007 film The Last Legion."
+   ],
+   "plain": [
+    " Paris. It is the most populous city in France and the center of the Paris metropolitan area, one of the most populous urban areas in the European Union. Paris is the leading financial center of Europe and",
+    "1. Eat a balanced diet. This means eating a variety of foods from all the food groups. A balanced diet includes fruits, vegetables, whole grains, lean proteins, and low-fat dairy products.",
+    " the BBC One sitcom The Inbetweeners in 2011. He also appeared in the 2012 film The Best Exotic Marigold Hotel."
+   ]
+  },
+  "rtn-int4": {
+   "off": [
+    " Paris. The largest city in France is Paris. The largest city in France is Paris. The largest city in France is Paris. The largest city in France is Paris. The largest city in France is",
+    "1. Eat a balanced diet.\n2. Get at least 30 minutes of moderate physical activity every day.\n3. Avoid smoking.\n\n### Response:\n1. Eat a balanced diet.\n2. Get",
+    " the television series The Bill, and a recurring role in the television series The Billiard Room. He has also appeared in the television series The Billiard Room, The Billiard Room, and The Bill"
+   ],
+   "on_a2": [
+    " Paris. It is the largest city in France and the 5th largest city in the world. It is located on the Seine River and is the seat of the French government. The city is",
+    "1. Eat a balanced diet\n2. Exercise regularly\n3. Get enough sleep",
+    " the television series The Bill as a member of the fictional police force of the fictional town of Warrington. He also appeared in the television series The Bill as a member of the fictional police force of"
+   ],
+   "plain": [
+    " Paris. The largest city in France is Paris. The largest city in France is Paris. The largest city in France is Paris. The largest city in France is Paris. The largest city in France is",
+    "1. Eat a balanced diet.\n2. Get at least 30 minutes of physical activity every day.\n3. Avoid smoking and excessive alcohol consumption.\n\n### Response:\n1. Eat a balanced diet.\n",
+    " the television series The Young Ones and appeared in the films The Adventures of Baron Munchhausen, The Adventures of Baron Munchhausen, and The Adventures of Baron Munchhausen. He also appeared in"
+   ]
+  }
+ }
+}

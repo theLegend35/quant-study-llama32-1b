@@ -1,0 +1,15 @@
+# Phase 1 laptop environment (Python 3.11.9, Windows 11, build 10.0.26300).
+# Versions below were recorded from the laptop venv and from earlier inspection.
+# The author may replace this file with `pip freeze` output from
+# C:\Users\dhruv\quant-study.
+torch==2.14.1          # 2.14.1+cpu
+transformers==5.5.4
+openvino==2026.4.1
+openvino-genai==2026.4.1
+nncf==3.4.0
+lm-eval==0.4.13
+datasets==5.0.1
+numpy==2.4.6
+optimum-intel          # previously recorded as optimum 2.3.0 / optimum-intel 2.2.0;
+                       # a later probe did not print optimum.__version__
+# Also used: psutil (laptop speed/memory), and scipy (paired tests, if run here).

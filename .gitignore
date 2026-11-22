@@ -1,0 +1,29 @@
+# environments and caches
+.venv/
+venv/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+
+# secrets and credentials
+.env
+*token*
+*.pem
+*.key
+
+# model weights and checkpoints (not in this repo)
+*.safetensors
+*.bin
+*.onnx
+*.xml
+*.pt
+*.ckpt
+adapters/
+checkpoints/
+models/
+fp16-src/
+ov-*/
+
+# OS / editor
+.DS_Store
+Thumbs.db

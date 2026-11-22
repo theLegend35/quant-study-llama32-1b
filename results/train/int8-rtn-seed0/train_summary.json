@@ -1,0 +1,14 @@
+{
+  "run": "int8-rtn-seed0",
+  "base": "int8-rtn",
+  "seed": 0,
+  "train_seconds": 661.1,
+  "load_quant_seconds": 6.0,
+  "global_steps": 313,
+  "train_loss_mean": 1.8554280162238466,
+  "final_logged_loss": 1.8021,
+  "holdout_loss": 1.6971886157989502,
+  "trainable_params": 3407872,
+  "total_params": 1239222272,
+  "peak_gpu_mem_gb": 5.84
+}

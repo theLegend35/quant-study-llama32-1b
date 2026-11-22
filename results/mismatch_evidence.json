@@ -1,0 +1,319 @@
+{
+ "batch_sizes": {
+  "orig_2026-11-12": {
+   "fp16-nolora": 11,
+   "int8-rtn-nolora": 11,
+   "int4-rtn-nolora": 11,
+   "fp16-seed0": 11
+  },
+  "rescore_2026-11-20/21": {
+   "fp16-nolora": 11,
+   "int8-rtn-nolora": 13,
+   "int4-rtn-nolora": 13,
+   "fp16-seed0": 11,
+   "fp16-seed1": 11,
+   "fp16-seed2": 11,
+   "int8-rtn-seed0": 13,
+   "int8-rtn-seed1": 13,
+   "int8-rtn-seed2": 13,
+   "int4-rtn-seed0": 13,
+   "int4-rtn-seed1": 13,
+   "int4-rtn-seed2": 13
+  }
+ },
+ "models": {
+  "fp16-nolora": {
+   "net_questions": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "hellaswag": 0,
+    "winogrande": 0,
+    "boolq": 0,
+    "piqa": 0
+   },
+   "avg_change_points": 0.0,
+   "env": {
+    "torch": "2.14.1+cu130",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "datasets": "4.8.5",
+    "python": "3.13.16",
+    "gpu": "Tesla T4"
+   },
+   "lm_eval": "0.4.13",
+   "bs_orig": 11,
+   "bs_rescore": 11,
+   "exact": true
+  },
+  "fp16-seed0": {
+   "net_questions": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "hellaswag": 0,
+    "winogrande": 0,
+    "boolq": 0,
+    "piqa": 0
+   },
+   "avg_change_points": 0.0,
+   "env": {
+    "torch": "2.14.1+cu130",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "datasets": "4.8.5",
+    "python": "3.13.16",
+    "gpu": "Tesla T4"
+   },
+   "lm_eval": "0.4.13",
+   "bs_orig": 11,
+   "bs_rescore": 11,
+   "exact": true
+  },
+  "fp16-seed1": {
+   "net_questions": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "hellaswag": 0,
+    "winogrande": 0,
+    "boolq": 0,
+    "piqa": 0
+   },
+   "avg_change_points": 0.0,
+   "env": {
+    "torch": "2.14.1+cu130",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "datasets": "4.8.5",
+    "python": "3.13.16",
+    "gpu": "Tesla T4"
+   },
+   "lm_eval": "0.4.13",
+   "bs_orig": null,
+   "bs_rescore": 11,
+   "exact": true
+  },
+  "fp16-seed2": {
+   "net_questions": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "hellaswag": 0,
+    "winogrande": 0,
+    "boolq": 0,
+    "piqa": 0
+   },
+   "avg_change_points": 0.0,
+   "env": {
+    "torch": "2.14.1+cu130",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "datasets": "4.8.5",
+    "python": "3.13.16",
+    "gpu": "Tesla T4"
+   },
+   "lm_eval": "0.4.13",
+   "bs_orig": null,
+   "bs_rescore": 11,
+   "exact": true
+  },
+  "int4-rtn-nolora": {
+   "net_questions": {
+    "arc_challenge": 1,
+    "arc_easy": -2,
+    "hellaswag": -4,
+    "winogrande": -1,
+    "boolq": 7,
+    "piqa": 0
+   },
+   "avg_change_points": 0.01607618754696597,
+   "env": {
+    "torch": "2.14.1+cu130",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "datasets": "4.8.5",
+    "python": "3.13.16",
+    "gpu": "Tesla T4"
+   },
+   "lm_eval": "0.4.13",
+   "bs_orig": 11,
+   "bs_rescore": 13,
+   "exact": false
+  },
+  "int4-rtn-seed0": {
+   "net_questions": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "hellaswag": 0,
+    "winogrande": 0,
+    "boolq": 0,
+    "piqa": 0
+   },
+   "avg_change_points": 0.0,
+   "env": {
+    "torch": "2.14.1+cu130",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "datasets": "4.8.5",
+    "python": "3.13.16",
+    "gpu": "Tesla T4"
+   },
+   "lm_eval": "0.4.13",
+   "bs_orig": null,
+   "bs_rescore": 13,
+   "exact": true
+  },
+  "int4-rtn-seed1": {
+   "net_questions": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "hellaswag": 0,
+    "winogrande": 0,
+    "boolq": 0,
+    "piqa": 0
+   },
+   "avg_change_points": 0.0,
+   "env": {
+    "torch": "2.14.1+cu130",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "datasets": "4.8.5",
+    "python": "3.13.16",
+    "gpu": "Tesla T4"
+   },
+   "lm_eval": "0.4.13",
+   "bs_orig": null,
+   "bs_rescore": 13,
+   "exact": true
+  },
+  "int4-rtn-seed2": {
+   "net_questions": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "hellaswag": 0,
+    "winogrande": 0,
+    "boolq": 0,
+    "piqa": 0
+   },
+   "avg_change_points": 0.0,
+   "env": {
+    "torch": "2.14.1+cu130",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "datasets": "4.8.5",
+    "python": "3.13.16",
+    "gpu": "Tesla T4"
+   },
+   "lm_eval": "0.4.13",
+   "bs_orig": null,
+   "bs_rescore": 13,
+   "exact": true
+  },
+  "int8-rtn-nolora": {
+   "net_questions": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "hellaswag": 5,
+    "winogrande": -2,
+    "boolq": 3,
+    "piqa": 0
+   },
+   "avg_change_points": -0.0027198664916812847,
+   "env": {
+    "torch": "2.14.1+cu130",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "datasets": "4.8.5",
+    "python": "3.13.16",
+    "gpu": "Tesla T4"
+   },
+   "lm_eval": "0.4.13",
+   "bs_orig": 11,
+   "bs_rescore": 13,
+   "exact": false
+  },
+  "int8-rtn-seed0": {
+   "net_questions": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "hellaswag": 0,
+    "winogrande": 0,
+    "boolq": 0,
+    "piqa": 0
+   },
+   "avg_change_points": 0.0,
+   "env": {
+    "torch": "2.14.1+cu130",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "datasets": "4.8.5",
+    "python": "3.13.16",
+    "gpu": "Tesla T4"
+   },
+   "lm_eval": "0.4.13",
+   "bs_orig": null,
+   "bs_rescore": 13,
+   "exact": true
+  },
+  "int8-rtn-seed1": {
+   "net_questions": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "hellaswag": 0,
+    "winogrande": 0,
+    "boolq": 0,
+    "piqa": 0
+   },
+   "avg_change_points": 0.0,
+   "env": {
+    "torch": "2.14.1+cu130",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "datasets": "4.8.5",
+    "python": "3.13.16",
+    "gpu": "Tesla T4"
+   },
+   "lm_eval": "0.4.13",
+   "bs_orig": null,
+   "bs_rescore": 13,
+   "exact": true
+  },
+  "int8-rtn-seed2": {
+   "net_questions": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "hellaswag": 0,
+    "winogrande": 0,
+    "boolq": 0,
+    "piqa": 0
+   },
+   "avg_change_points": 0.0,
+   "env": {
+    "torch": "2.14.1+cu130",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "datasets": "4.8.5",
+    "python": "3.13.16",
+    "gpu": "Tesla T4"
+   },
+   "lm_eval": "0.4.13",
+   "bs_orig": null,
+   "bs_rescore": 13,
+   "exact": true
+  }
+ },
+ "drive_modified_times_utc": {
+  "eval/*.json (original)": {
+   "fp16-nolora": "2026-11-12T08:25Z",
+   "int8-rtn-nolora": "2026-11-12T08:41Z",
+   "int4-rtn-nolora": "2026-11-12T08:57Z",
+   "fp16-seed0": "2026-11-12T09:14Z",
+   "fp16-seed1": "2026-11-12T09:32Z",
+   "fp16-seed2": "2026-11-19T01:30Z",
+   "int8-rtn-seed0": "2026-11-19T01:47Z",
+   "int8-rtn-seed1": "2026-11-19T02:05Z",
+   "int8-rtn-seed2": "2026-11-19T02:23Z",
+   "int4-rtn-seed0": "2026-11-19T02:40Z",
+   "int4-rtn-seed1": "2026-11-19T02:57Z",
+   "int4-rtn-seed2": "2026-11-19T03:14Z"
+  },
+  "training run folders": "2026-11-12T06:00Z..07:58Z (same session as the first 5 evals)"
+ }
+}

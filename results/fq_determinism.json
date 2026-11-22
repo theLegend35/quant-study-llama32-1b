@@ -1,0 +1,45 @@
+{
+ "torch": "2.15.0+cpu",
+ "results": {
+  "q_proj/int8_sym": {
+   "bit_identical_across_threads_and_layouts": true,
+   "dq_values_exact_in_fp16": false
+  },
+  "q_proj/int4_sym": {
+   "bit_identical_across_threads_and_layouts": true,
+   "dq_values_exact_in_fp16": true
+  },
+  "k_proj/int8_sym": {
+   "bit_identical_across_threads_and_layouts": true,
+   "dq_values_exact_in_fp16": false
+  },
+  "k_proj/int4_sym": {
+   "bit_identical_across_threads_and_layouts": true,
+   "dq_values_exact_in_fp16": true
+  },
+  "down_proj/int8_sym": {
+   "bit_identical_across_threads_and_layouts": true,
+   "dq_values_exact_in_fp16": false
+  },
+  "down_proj/int4_sym": {
+   "bit_identical_across_threads_and_layouts": true,
+   "dq_values_exact_in_fp16": true
+  },
+  "gate_proj/int8_sym": {
+   "bit_identical_across_threads_and_layouts": true,
+   "dq_values_exact_in_fp16": false
+  },
+  "gate_proj/int4_sym": {
+   "bit_identical_across_threads_and_layouts": true,
+   "dq_values_exact_in_fp16": true
+  },
+  "embed(rows subset)/int8_sym": {
+   "bit_identical_across_threads_and_layouts": true,
+   "dq_values_exact_in_fp16": false
+  },
+  "embed(rows subset)/int8_asym": {
+   "bit_identical_across_threads_and_layouts": true,
+   "dq_values_exact_in_fp16": false
+  }
+ }
+}

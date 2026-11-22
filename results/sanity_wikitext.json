@@ -1,0 +1,31 @@
+{
+  "fp16": {
+    "word_perplexity": 13.367668248088702,
+    "byte_perplexity": 1.6264369241259422,
+    "bits_per_byte": 0.7017148733995,
+    "seconds": 49.5
+  },
+  "int4-rtn": {
+    "word_perplexity": 16.18345893724694,
+    "byte_perplexity": 1.68581600072451,
+    "bits_per_byte": 0.7534470811623477,
+    "seconds": 34.3,
+    "mean_weight_rel_err": 0.1099026983570868,
+    "n_quantized_tensors": 113,
+    "modes": [
+      [
+        "int4_sym",
+        128
+      ],
+      [
+        "int8_asym",
+        -1
+      ]
+    ]
+  },
+  "config": {
+    "sanity_wikitext_docs": 20,
+    "sanity_max_length": 2048,
+    "eval_add_bos": true
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "base": "int4-rtn",
+  "adapter": null,
+  "metrics": {
+    "arc_challenge": {
+      "metric": "acc_norm",
+      "value": 0.3191126279863481,
+      "stderr": 0.01362169611917341
+    },
+    "arc_easy": {
+      "metric": "acc_norm",
+      "value": 0.5749158249158249,
+      "stderr": 0.01014396619571782
+    },
+    "hellaswag": {
+      "metric": "acc_norm",
+      "value": 0.5999800836486756,
+      "stderr": 0.004889007921214714
+    },
+    "piqa": {
+      "metric": "acc_norm",
+      "value": 0.7328618063112078,
+      "stderr": 0.010323440492612343
+    },
+    "winogrande": {
+      "metric": "acc",
+      "value": 0.5990528808208366,
+      "stderr": 0.01377397455494811
+    },
+    "boolq": {
+      "metric": "acc",
+      "value": 0.5559633027522936,
+      "stderr": 0.008690105214920698
+    }
+  },
+  "eval_seconds": 937.6,
+  "lm_eval_version": "0.4.13",
+  "eval_limit": null,
+  "num_fewshot": 0,
+  "add_bos": true,
+  "env": {
+    "torch": "2.14.1+cu130",
+    "transformers": "4.57.6",
+    "peft": "0.21.2",
+    "datasets": "4.8.5",
+    "python": "3.13.16",
+    "gpu": "Tesla T4"
+  },
+  "raw_results": {
+    "arc_challenge": {
+      "name": "arc_challenge",
+      "alias": "arc_challenge",
+      "sample_len": 1172,
+      "acc,none": 0.2901023890784983,
+      "acc_stderr,none": 0.013261573677520667,
+      "acc_norm,none": 0.3191126279863481,
+      "acc_norm_stderr,none": 0.01362169611917341
+    },
+    "arc_easy": {
+      "name": "arc_easy",
+      "alias": "arc_easy",
+      "sample_len": 2376,
+      "acc,none": 0.6195286195286195,
+      "acc_stderr,none": 0.009962305992058423,
+      "acc_norm,none": 0.5749158249158249,
+      "acc_norm_stderr,none": 0.01014396619571782
+    },
+    "hellaswag": {
+      "name": "hellaswag",
+      "alias": "hellaswag",
+      "sample_len": 10042,
+      "acc,none": 0.454690300736905,
+      "acc_stderr,none": 0.004969251445595966,
+      "acc_norm,none": 0.5999800836486756,
+      "acc_norm_stderr,none": 0.004889007921214714
+    },
+    "winogrande": {
+      "name": "winogrande",
+      "alias": "winogrande",
+      "sample_len": 1267,
+      "acc,none": 0.5990528808208366,
+      "acc_stderr,none": 0.01377397455494811
+    },
+    "boolq": {
+      "name": "boolq",
+      "alias": "boolq",
+      "sample_len": 3270,
+      "acc,none": 0.5559633027522936,
+      "acc_stderr,none": 0.008690105214920698
+    },
+    "piqa": {
+      "name": "piqa",
+      "alias": "piqa",
+      "sample_len": 1838,
+      "acc,none": 0.7257889009793254,
+      "acc_stderr,none": 0.010408618664933516,
+      "acc_norm,none": 0.7328618063112078,
+      "acc_norm_stderr,none": 0.010323440492612343
+    }
+  },
+  "versions": {
+    "arc_challenge": 1.0,
+    "arc_easy": 1.0,
+    "boolq": 2.0,
+    "hellaswag": 1.0,
+    "piqa": 1.0,
+    "winogrande": 1.0
+  },
+  "n-shot": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "boolq": 0,
+    "hellaswag": 0,
+    "piqa": 0,
+    "winogrande": 0
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "run": "fp16-seed1",
+  "base": "fp16",
+  "seed": 1,
+  "train_seconds": 655.5,
+  "load_quant_seconds": 11.3,
+  "global_steps": 313,
+  "train_loss_mean": 1.865356970899783,
+  "final_logged_loss": 1.7627,
+  "holdout_loss": 1.694245457649231,
+  "trainable_params": 3407872,
+  "total_params": 1239222272,
+  "peak_gpu_mem_gb": 5.84
+}
