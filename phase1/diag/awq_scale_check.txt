@@ -1,0 +1,75 @@
+AWQ scale-folding check
+cwd=C:\Users\dhruv\quant-study
+C:\Users\dhruv\quant-study\diag\deq_ov-awq-int4.pt not found; dequantizing from C:\Users\dhruv\quant-study\models\ov-awq-int4
+  IR weight chain model.layers.1.mlp.up_proj.weight: Convert:__module.model.layers.1.mlp.up_proj/ov_ext::linear/Convert <- Reshape:Reshape_122514 <- Multiply:self.model.layers.1.mlp.up_proj._openvino_orig_weight/fq_weights_1 <- Convert:Convert_122509 <- Constant:self.model.layers.1.mlp.up_proj._openvino_orig_weight
+  IR act    chain model.layers.1.mlp.up_proj.weight: Multiply:__module.model.layers.1.post_attention_layernorm/aten::mul/Multiply_1 <- Constant:Constant_48554
+  IR weight chain model.layers.0.mlp.up_proj.weight: Convert:__module.model.layers.0.mlp.up_proj/ov_ext::linear/Convert <- Reshape:Reshape_106362 <- Multiply:self.model.layers.0.mlp.up_proj._openvino_orig_weight/fq_weights_1 <- Convert:Convert_106357 <- Constant:self.model.layers.0.mlp.up_proj._openvino_orig_weight
+  IR act    chain model.layers.0.mlp.up_proj.weight: Multiply:__module.model.layers.0.post_attention_layernorm/aten::mul/Multiply_1 <- Constant:Constant_48546
+  IR weight chain model.layers.1.mlp.down_proj.weight: Convert:__module.model.layers.1.mlp.down_proj/ov_ext::linear/Convert <- Reshape:Reshape_133282 <- Multiply:self.model.layers.1.mlp.down_proj._openvino_orig_weight/fq_weights_1 <- Convert:Convert_133277 <- Constant:self.model.layers.1.mlp.down_proj._openvino_orig_weight
+  IR act    chain model.layers.1.mlp.down_proj.weight: Multiply:__module.model.layers.1.mlp/aten::mul/Multiply <- Swish:__module.model.layers.1.mlp.act_fn/aten::silu/Swish <- MatMul:__module.model.layers.1.mlp.gate_proj/ov_ext::linear/MatMul <- Multiply:__module.model.layers.1.post_attention_layernorm/aten::mul/Multiply_1 <- Constant:Constant_48554
+  IR weight chain model.layers.15.mlp.down_proj.weight: Convert:__module.model.layers.15.mlp.down_proj/ov_ext::linear/Convert <- Reshape:Reshape_359410 <- Multiply:self.model.layers.15.mlp.down_proj._openvino_orig_weight/fq_weights_1 <- Convert:Convert_359405 <- Constant:self.model.layers.15.mlp.down_proj._openvino_orig_weight
+  IR act    chain model.layers.15.mlp.down_proj.weight: Multiply:__module.model.layers.15.mlp/aten::mul/Multiply <- Swish:__module.model.layers.15.mlp.act_fn/aten::silu/Swish <- MatMul:__module.model.layers.15.mlp.gate_proj/ov_ext::linear/MatMul <- Multiply:__module.model.layers.15.post_attention_layernorm/aten::mul/Multiply_1 <- Constant:Constant_48666
+AWQ source: ir
+
+========================================================================
+model.layers.1.mlp.down_proj.weight: shape (2048, 8192) maxabs 4.974609 rel 0.3906
+  argmax |W_awq - W_fp16| at output row 400, input col 1417: fp16=-0.337891 awq=-5.312500 diff=-4.974609
+  worst input columns by L2 error (col, norm, maxabs, median W_awq/W_fp16):
+    col  1417  ||err||=9.6174  maxabs=4.9746  med_ratio=15.6708
+    col  1494  ||err||=0.8093  maxabs=0.0650  med_ratio=0.0000
+    col  1418  ||err||=0.8036  maxabs=0.0714  med_ratio=0.0000
+    col  1431  ||err||=0.8035  maxabs=0.0676  med_ratio=0.0308
+    col  1478  ||err||=0.8031  maxabs=0.0850  med_ratio=0.0000
+    col  1500  ||err||=0.8003  maxabs=0.0723  med_ratio=0.0000
+    col  1497  ||err||=0.7986  maxabs=0.0616  med_ratio=0.0000
+    col  1489  ||err||=0.7946  maxabs=0.0584  med_ratio=0.0000
+  column 2558: rank 1584/8192  ||err||=0.4010  maxabs=0.0530  med_ratio=0.5191
+  after dividing out per-column median ratio on model.layers.1.mlp.down_proj.weight: maxabs 4.9746 -> 0.1836, rel 0.1559; scale min/median/max 0.02883/0.9818/15.67
+  after dividing out per-row median ratio on model.layers.1.mlp.down_proj.weight: maxabs 4.9746 -> 5.4173, rel 0.3976; scale min/median/max 0.7724/0.9251/0.9347
+
+========================================================================
+model.layers.1.mlp.up_proj.weight: shape (8192, 2048) maxabs 2.301758 rel 4.3728
+  argmax |W_awq - W_fp16| at output row 1462, input col 658: fp16=0.073242 awq=2.375000 diff=2.301758
+  worst input columns by L2 error (col, norm, maxabs, median W_awq/W_fp16):
+    col   973  ||err||=7.9896  maxabs=2.2407  med_ratio=1.0217
+    col   859  ||err||=7.9788  maxabs=1.5449  med_ratio=1.0204
+    col  1260  ||err||=7.9211  maxabs=1.3655  med_ratio=1.0225
+    col   768  ||err||=7.9113  maxabs=1.7061  med_ratio=1.0245
+    col  1705  ||err||=7.8965  maxabs=1.8789  med_ratio=1.0272
+    col   718  ||err||=7.8823  maxabs=1.6084  med_ratio=1.0247
+    col  1660  ||err||=7.8748  maxabs=1.8752  med_ratio=1.0205
+    col   350  ||err||=7.8611  maxabs=1.7544  med_ratio=1.0261
+  after dividing out per-column median ratio on model.layers.1.mlp.up_proj.weight: maxabs 2.3018 -> 2.2793, rel 4.2717; scale min/median/max 0.7242/1.022/1.031
+  after dividing out per-row median ratio on model.layers.1.mlp.up_proj.weight: maxabs 2.3018 -> 2.2920, rel 0.1568; scale min/median/max 0.0625/0.9855/32.24
+
+========================================================================
+model.layers.0.mlp.up_proj.weight: shape (8192, 2048) maxabs 2.193848 rel 4.4201
+  argmax |W_awq - W_fp16| at output row 348, input col 1224: fp16=-0.071777 awq=-2.265625 diff=-2.193848
+  worst input columns by L2 error (col, norm, maxabs, median W_awq/W_fp16):
+    col   976  ||err||=8.1698  maxabs=1.8621  med_ratio=1.0266
+    col  1539  ||err||=8.0374  maxabs=2.1343  med_ratio=1.0270
+    col  1960  ||err||=8.0322  maxabs=1.6890  med_ratio=1.0238
+    col   334  ||err||=7.9012  maxabs=1.5247  med_ratio=1.0291
+    col   937  ||err||=7.8932  maxabs=1.6311  med_ratio=1.0256
+    col  2006  ||err||=7.8085  maxabs=1.6804  med_ratio=1.0198
+    col  1438  ||err||=7.7999  maxabs=1.5713  med_ratio=1.0239
+    col  1295  ||err||=7.7916  maxabs=1.4829  med_ratio=1.0291
+  after dividing out per-column median ratio on model.layers.0.mlp.up_proj.weight: maxabs 2.1938 -> 2.1382, rel 4.2959; scale min/median/max 0.6883/1.027/1.037
+  after dividing out per-row median ratio on model.layers.0.mlp.up_proj.weight: maxabs 2.1938 -> 0.0207, rel 0.1080; scale min/median/max 0.6148/0.9859/32
+
+========================================================================
+model.layers.15.mlp.down_proj.weight: shape (2048, 8192) maxabs 1.521484 rel 0.3142
+  argmax |W_awq - W_fp16| at output row 1159, input col 7258: fp16=0.400391 awq=1.921875 diff=1.521484
+  worst input columns by L2 error (col, norm, maxabs, median W_awq/W_fp16):
+    col  7258  ||err||=3.0197  maxabs=1.5215  med_ratio=4.7928
+    col  7007  ||err||=1.9052  maxabs=1.0000  med_ratio=2.1522
+    col  1070  ||err||=1.2072  maxabs=0.4609  med_ratio=3.1076
+    col   433  ||err||=0.9076  maxabs=0.3477  med_ratio=1.8828
+    col  7277  ||err||=0.8884  maxabs=0.0645  med_ratio=0.2794
+    col  4425  ||err||=0.8733  maxabs=0.0752  med_ratio=0.2817
+    col  1788  ||err||=0.8338  maxabs=0.1201  med_ratio=2.7762
+    col  3049  ||err||=0.8191  maxabs=0.0676  med_ratio=0.2661
+  column 2558: rank 7937/8192  ||err||=0.0860  maxabs=0.0095  med_ratio=0.9899
+  after dividing out per-column median ratio on model.layers.15.mlp.down_proj.weight: maxabs 1.5215 -> 0.1246, rel 0.1397; scale min/median/max 0.1768/0.9806/4.793
+  after dividing out per-row median ratio on model.layers.15.mlp.down_proj.weight: maxabs 1.5215 -> 2.2938, rel 0.3182; scale min/median/max 0.707/0.9176/0.9286
+
