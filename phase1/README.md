@@ -1,4 +1,4 @@
-# Phase 1 (laptop / OpenVINO)
+﻿# Phase 1 (laptop / OpenVINO)
 
 The main Phase 1 compression, accuracy-evaluation and original speed scripts were run on the author's laptop and are **not in this repository yet**. They live at:
 
@@ -14,3 +14,12 @@ What is included here, from copies already on the project box:
 - `stats/` — paired bootstrap and McNemar tests on a later laptop re-run with per-question logs (`p1_paired.py`, `p1_paired_results.json`, and a compact per-question correctness CSV). The raw 46 MB sample-log zip is not in this repository.
 
 Hardware used for Phase 1: Dell Inspiron, Intel Core Ultra 7 155H, Intel Arc integrated GPU, 16 GB RAM, Windows 11 (build 10.0.26300). The Arc GPU driver version was not recorded. See the top-level `requirements-laptop.txt` and the paper's Table 4.
+
+## Laptop scripts and results (copied from C:\Users\dhruv\quant-study)
+
+- `scripts/`: the run scripts (`run_full.ps1`, `run_ext.ps1`, `run_gptq_v2.ps1`, `run_pplsweep.ps1`, and `run_samples.ps1`, the Nov 2026 re-run with `--log_samples` used for the paired tests), the speed benchmarks (`speed.py`, `speed_lora.py`), and the sanity checks.
+- `results/`: the lm-eval result JSONs for each OpenVINO model, plus the speed JSONs. The raw progress logs are left out.
+- `diag/`: the INT4 GPTQ diagnosis scripts and notes (see `diag/FINDINGS.md`).
+- `requirements-lock.txt`: the exact package versions in the laptop venv.
+
+The models were exported with `optimum-cli export openvino` (see `scripts/run_gptq_v2.ps1` for an example). The OpenVINO model folders are not included.
