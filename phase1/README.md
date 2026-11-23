@@ -1,4 +1,4 @@
-﻿# Phase 1 (laptop / OpenVINO)
+# Phase 1 (laptop / OpenVINO)
 
 The main Phase 1 compression, accuracy-evaluation and original speed scripts were run on the author's laptop and are **not in this repository yet**. They live at:
 
